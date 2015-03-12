@@ -16,5 +16,7 @@ public class Main {
 //        System.out.println(m);
 //        System.out.println(m.length());
 //        s.addition("1101", "1111");
+//        System.out.println(s.conditional("1001", "1010", "1111"));
+//        System.out.println(s.addition(s.addition(s.addition("1110", "1000"), "1010"), "1001"));
     }
 }

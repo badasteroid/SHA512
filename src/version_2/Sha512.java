@@ -116,7 +116,9 @@ public class Sha512 {
         result[7] = pad(prevDigest[6]); //G -> H
 
         //compute Y -> E
-        
+        String condEFG = conditional(prevDigest[4], prevDigest[5], prevDigest[6]);
+        String rotateE = rotate(prevDigest[4]);
+        String tempYAdd = addition(words, words);
 
         return result;
     }
@@ -161,7 +163,7 @@ public class Sha512 {
                 int temp1 = a.charAt(i)-48;
                 int temp2 = b.charAt(i)-48;
                 int xor = temp1 ^ temp2;
-                res += xor + "";
+                res += xor;
             }
         }
         return res;
@@ -179,49 +181,40 @@ public class Sha512 {
                 int add = (a1 + b1) >= 2 ? (a1+b1)-2 : (a1 + b1);
                 add = carry + add >= 2 ? (carry+add)-2 : (carry+add);
                 carry = (carry+a1+b1) / 2;
-//                System.out.println("#" + (i+1));
-//                System.out.println("a: " + a1);
-//                System.out.println("b: " + b1);
-//                System.out.println("res: " + add);
-//                System.out.println("carry: " + carry);
-//                System.out.println();
                 res = add + res;
             }
             res = carry + res;
             res = res.substring(1, res.length());
-//            long tempA = Long.parseLong(a.substring(1,a.length()),2);
-//            System.out.println(tempA);
-//            long tempB = Long.parseLong(b.substring(1,b.length()),2);
-//            System.out.println(tempB);
-//            long add = tempA+tempB;
-//            System.out.println(add);
-//            String tempAdd = Long.toBinaryString(add) + "";
-//            tempAdd = tempAdd.substring(1, tempAdd.length());
-//            System.out.println("add: " + tempAdd);
-//            int carry = Integer.parseInt(Long.toBinaryString(add).charAt(0)+"");
-//            System.out.println("carry: " + carry);
-//            System.out.println("a: " + Long.toBinaryString(Long.parseLong(a.charAt(0)+"")));
-//            System.out.println("b: " + Long.toBinaryString(Long.parseLong(b.charAt(0)+"")));
-//            int totalCarry = (Integer.parseInt(a.charAt(0)+"") + Integer.parseInt(b.charAt(0)+"") + carry)%2;
-//            System.out.println("totalCarry: " + totalCarry);
-//            res = Integer.toBinaryString(totalCarry) + tempAdd.substring(1,tempAdd.length());
-//            System.out.println("res: " + res);
-//            int totalCarry = 0;
-//            if(a.length() == 64) {
-//                totalCarry = (Integer.parseInt(a.charAt(0)+"") + Integer.parseInt(b.charAt(0)+"") + carry)%2;
-//            } else {
-//                totalCarry = Integer.parseInt(a.charAt(0)+"") + Integer.parseInt(b.charAt(0)+"") + carry;
-//            }
-//            res = Integer.toBinaryString(totalCarry) + tempAdd;
-//            System.out.println(totalCarry);
-//            System.out.println(carry);
         }
         return res;
     }
 
     public String majority(String x, String y, String z) {
         String res = "";
-        
+        for(int i = 0; i < x.length(); i++) {
+            int x1 = x.charAt(i)-48;
+            int y1 = y.charAt(i)-48;
+            int z1 = z.charAt(i)-48;
+            int maj = (x1 & y1) ^ (y1 & z1) ^ (z1 & x1);
+            res += maj;
+        }
+        return res;
+    }
+
+    public String conditional(String x, String y, String z) {
+        String res = "";
+        for(int i = 0; i < x.length(); i++) {
+            int x1 = x.charAt(i)-48;
+            int y1 = y.charAt(i)-48;
+            int z1 = z.charAt(i)-48;
+            int cond = (x1 & y1) ^ (NOT(x1) & z1);
+            res += cond;
+        }
+        return res;
+    }
+
+    public String rotate(String x) {
+        String res = xor(xor(rotR(x, 28),rotR(x, 34)),rotR(x,39));
         return res;
     }
 
@@ -245,6 +238,11 @@ public class Sha512 {
         for(int i = 0; i < a.length(); i++) {
             res += a.charAt(i) == '0' ? "1" : "0";
         }
+        return res;
+    }
+
+    public int NOT(int a) {
+        int res = a == 0 ? 1 : 0;
         return res;
     }
 
