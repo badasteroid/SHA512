@@ -171,9 +171,9 @@ public class Sha512 {
 
     public String addition(String a, String b) {
         String res = "";
-        if(a.length() != b.length()) {
-            res = a;
-        } else {
+//        if(a.length() != b.length()) {
+//            res = a;
+//        } else {
             int carry = 0;
             for(int i = a.length()-1; i >= 0; i--) {
                 int a1 = a.charAt(i)-48;
@@ -185,7 +185,7 @@ public class Sha512 {
             }
             res = carry + res;
             res = res.substring(1, res.length());
-        }
+//        }
         return res;
     }
 

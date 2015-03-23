@@ -42,12 +42,12 @@ public class Sha512 {
                                    0x28db77f523047d84L, 0x32caab7b40c72493L, 0x3c9ebe0a15c9bebcL, 0x431d67c49c100d4cL,
                                    0x4cc5d4becb3e42b6L, 0x597f299cfc657e2aL, 0x5fcb6fab3ad6faecL, 0x6c44198c4a475817L};
 
-    String originalMessage;
-    String lengthMessage;
-    String paddingMessage;
-    String message;
-    String[] messageBlock;
-    String digest;
+    private String originalMessage;
+    private String lengthMessage;
+    private String paddingMessage;
+    private String message;
+    private String[] messageBlock;
+    private String digest;
 
     public Sha512() {
         message = "";
@@ -70,10 +70,10 @@ public class Sha512 {
         digest = "";
     }
 
-    public String getDigestInText() {
+    public String getDigest() {
         String text = "";
-        for(int i = 0; i < digest.length(); i+=16) {
-            String bits = digest.substring(i, i+16);
+        for(int i = 0; i < digest.length(); i+=4) {
+            String bits = digest.substring(i, i+4);
             text += Long.toHexString(longValue(bits));
         }
         return text;
@@ -86,6 +86,7 @@ public class Sha512 {
             String block = messageBlock[countBlock];
             String[] words = wordsExpansion(block);
             String[] first = finalDigest;
+            
             //initialize first digest
             if(countBlock == 0) {
                 for(int i = 0; i < finalDigest.length; i++) {
@@ -100,16 +101,12 @@ public class Sha512 {
 
             //final adding
             for(int i = 0; i < finalDigest.length; i++) {
-//                finalDigest[i] = pad(Long.toBinaryString(longValue(finalDigest[i]) + longValue(first[i])));
-                finalDigest[i] = Long.toBinaryString(longValue(finalDigest[i]) + longValue(first[i]));
+                finalDigest[i] = pad(Long.toBinaryString(longValue(finalDigest[i]) + longValue(first[i])));
             }
         }
         for(int i = 0; i < finalDigest.length; i++) {
             digest += finalDigest[i] + "";
         }
-//        digest = pad(digest);
-        System.out.println(digest);
-        System.out.println(digest.length());
     }
 
     private String[] wordsExpansion(String block) {
